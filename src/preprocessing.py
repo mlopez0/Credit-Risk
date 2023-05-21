@@ -67,14 +67,14 @@ def preprocess_data(
         for x, y in enumerate([working_train_df, working_val_df, working_test_df])
     }
 
-    dfs_hc_econded = {}
+    dfs_hc_enconded = {}
     dfs_lc_encoded = {}
 
     for index, value in dfs.items():
-        dfs_hc_econded[index] = pd.DataFrame(
+        dfs_hc_enconded[index] = pd.DataFrame(
             ohe.transform(value[high_card_cols])
         )
-        dfs_hc_econded[index].index = value[high_card_cols].index
+        dfs_hc_enconded[index].index = value[high_card_cols].index
 
         dfs_lc_encoded[index] = pd.DataFrame(
             oe.transform(value[low_card_cols])
@@ -82,16 +82,16 @@ def preprocess_data(
 
         dfs_lc_encoded[index].index = value[low_card_cols].index
 
-        init_col = dfs_hc_econded[index].shape[1]
+        init_col = dfs_hc_enconded[index].shape[1]
 
-        fin_col = dfs_hc_econded[index].shape[1] + dfs_lc_encoded[index].shape[1]
+        fin_col = dfs_hc_enconded[index].shape[1] + dfs_lc_encoded[index].shape[1]
         dfs_lc_encoded[index].columns = [
             col_n for col_n in range(init_col, fin_col)
         ]
 
         dfs[index] = (
             value.drop(columns=[*high_card_cols, *low_card_cols])
-            .join(dfs_hc_econded[index])
+            .join(dfs_hc_enconded[index])
             .join(dfs_lc_encoded[index])
         )
 
